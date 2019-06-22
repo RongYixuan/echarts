@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="echarts.min.js"></script>
+    <script src="data.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .container{
+            width: 1266px;
+            height: 500px;
+            margin: 30px 50px;
+        }
+    </style>
+</head>
+<body>
+<div class="container"></div>
+<script>
+    let container=document.querySelector('.container')
+    let echart=echarts.init(container)
+    let option={
+        background: 'lavender',
+        title: {
+            text: 'TOP250',
+            left: 'center',
+            top: 20,
+            textStyle: {
+                color: '#ccc',
+            },
+            margin:20
+        },
+        series: [
+            {
+                name:'电影类型',
+                type:'pie',
+                radius: ['50%', '70%'],
+                avoidLabelOverlap: false,
+                label: {
+                    normal: {
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        show: true,
+                        textStyle: {
+                            fontSize: '30',
+                            fontWeight: 'bold'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                data:[]
+            }
+        ]
+    }
+
+    let arr=[]
+    for (let i=0;i<categories.length;i++){
+        if (categories=='全部'){
+            continue
+        }
+        let name = categories[i]
+        let value = data.filter(ele=>ele[4].includes(name)).length
+        arr.push({name,value})
+    }
+    option.series[0].data=arr
+    echart.setOption(option)
+</script>
+</body>
+</html>

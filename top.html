@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="echarts.min.js"></script>
+    <script src="data.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .container{
+            width: 1266px;
+            height: 550px;
+            margin: 30px 50px;
+        }
+    </style>
+</head>
+<body>
+<div class="container"></div>
+<script>
+    let container=document.querySelector('.container')
+    let echart=echarts.init(container)
+    let selected={}
+    let series=[]
+
+    categories.forEach(category=>{
+        let movies=data.filter(ele=>ele[4].includes(category))
+
+        if (categories=='全部'){
+            selected[category]=true
+        }else {
+            selected[category]=false
+        }
+
+        let obj={
+            name:category,
+            data: category=='全部'? data : movies,
+            type:'scatter',
+            symbolSize: function (data) {
+                return Math.ceil(data[2] / 10)
+            },
+            label: {
+                emphasis: {
+                    show: true,
+                    formatter: function (param) {
+                        return param.data[3];
+                    },
+                    position: 'top'
+                }
+            },
+            itemStyle: {
+                normal: {
+                    shadowBlur: 10,
+                    shadowColor: 'rgba(120, 36, 50, 0.5)',
+                    shadowOffsetY: 5,
+                    color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                        offset: 0,
+                        color: 'rgb(251, 118, 123)'
+                    }, {
+                        offset: 1,
+                        color: 'rgb(204, 46, 72)'
+                    }])
+                }
+            }
+        }
+        series.push(obj)
+    })
+
+    console.log(selected);
+    console.log(series);
+    let option={
+        backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [{
+            offset: 0,
+            color: '#f7f8fa'
+        }, {
+            offset: 1,
+            color: '#cdd0d5'
+        }]),
+        title: {
+            text: '豆瓣电影TOP250'
+        },
+        legend: {
+            top:25,
+            right: 10,
+            type:'scroll',
+            data:categories,
+            selected,
+            selectedMode:'single'
+        },
+        xAxis: {
+            name:'观影人数',
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed'
+                }
+            }
+        },
+        yAxis: {
+            name:'评分',
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed'
+                }
+            },
+            scale: true
+        },
+        series
+
+    }
+
+    echart.setOption(option)
+</script>
+</body>
+</html>
